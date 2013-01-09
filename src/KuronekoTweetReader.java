@@ -174,5 +174,4 @@ public class KuronekoTweetReader extends JFrame
 			//mTextArea.insert(sb.toString(), 0);
 		}
 	}
-
 }
