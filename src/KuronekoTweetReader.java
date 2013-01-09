@@ -1,4 +1,4 @@
-import java.awt.BorderLayout;
+Ôªøimport java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -35,45 +35,44 @@ public class KuronekoTweetReader extends JFrame
 
 	ArrayList mArrayList;
 	String mSepa = "@@hogehiefuga@@";
-	 
+
 
 	public static void main(String[] args) {
 		KuronekoTweetReader frame = new KuronekoTweetReader();
-        frame.setTitle("Tweet Reader for KuronekoWiki");
+		frame.setTitle("Tweet Reader for KuronekoWiki");
 		frame.setSize(800, 600);
 		frame.setVisible(true);
 	}
 
 	public KuronekoTweetReader() {
+		ConfigurationBuilder confbuilder = new ConfigurationBuilder();
+		TwitterFactory twitterfactory = new TwitterFactory(confbuilder.build());
+		mTwitter = twitterfactory.getInstance();
+
+		mContentPane = getContentPane();
+		mContentPane.setLayout(new BorderLayout());
 		
-	    ConfigurationBuilder confbuilder = new ConfigurationBuilder();
-	    TwitterFactory twitterfactory = new TwitterFactory(confbuilder.build());
-	    mTwitter = twitterfactory.getInstance();
+		mTextArea = new JTextArea();
+		mScrollPane = new JScrollPane();
+		mScrollPane.setViewportView(mTextArea);
+		mContentPane.add(mScrollPane, BorderLayout.CENTER);
 
-        mContentPane = getContentPane();
-        mContentPane.setLayout(new BorderLayout());
-        
-        mTextArea = new JTextArea();
-        mScrollPane = new JScrollPane();
-        mScrollPane.setViewportView(mTextArea);
-        mContentPane.add(mScrollPane, BorderLayout.CENTER);
-
-        mPanel = new JPanel();
-        mPanel.setLayout(new FlowLayout());
-        mButton = new JButton("Get");
-        mPanel.add(mButton);
-        mContentPane.add(mPanel, BorderLayout.SOUTH);
-        
-        mButton.addActionListener(this);
-        
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mPanel = new JPanel();
+		mPanel.setLayout(new FlowLayout());
+		mButton = new JButton("Get");
+		mPanel.add(mButton);
+		mContentPane.add(mPanel, BorderLayout.SOUTH);
+		
+		mButton.addActionListener(this);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
-	    mArrayList = new ArrayList<String>();
+		mArrayList = new ArrayList<String>();
 		mTextArea.setText("");
 		ResponseList<Status> list;
 
@@ -81,7 +80,7 @@ public class KuronekoTweetReader extends JFrame
 		String screenname;
 		
 		if (arg0.getSource() == mButton) {
-			//System.out.println("GetÇ™âüÇ≥ÇÍÇ‹ÇµÇΩÅB");
+			//System.out.println("Get„ÅåÊäº„Åï„Çå„Åæ„Åó„Åü„ÄÇ");
 			Paging paging = new Paging(1, 100);
 			
 			try {
@@ -117,14 +116,14 @@ public class KuronekoTweetReader extends JFrame
 				if ( ! col[1].equals(currentDate) ) {
 					if (! currentDate.equals("")) {
 						kaishiFlag = true;
-				        mTextArea.append("\n<< " + col[1] + " >>\n");
+						mTextArea.append("\n<< " + col[1] + " >>\n");
 					}
 					currentDate = col[1];
 				}
 
 				if ( kaishiFlag ) {
 					if ( rtCol.length == 2 ) {
-						mTextArea.append( "Å@&color(gray){ÅiRT @" + rtCol[1] + "Åj}\n" );
+						mTextArea.append( "„ÄÄ&color(gray){ÔºàRT @" + rtCol[1] + "Ôºâ}\n" );
 					}
 					
 					if (col[2].equals("kuroneko_daten")) {
@@ -138,43 +137,42 @@ public class KuronekoTweetReader extends JFrame
 			}
 		}
 	}		
-			
-	
+
 	private void getTweet(String screenname, 	ResponseList<Status> list) {
 		for(int i = 0; i < list.size(); i++){
-          Status s = list.get(i);
-	      // àÍà”Ç»ÉcÉCÅ[ÉgID
-          long id = s.getId();
-          // ÉcÉCÅ[ÉgÇÃì‡óe
-          String text = s.getText();
-          // ìäçeì˙éû
-          Date created = s.getCreatedAt();
-          Calendar cal = Calendar.getInstance();
-          cal.setTime(created);
-          // à íuèÓïÒ
-          GeoLocation geoloc = s.getGeoLocation();
-          Double lat = null;
-          Double lng = null;
-          if(geoloc != null){
-            lat = new Double(geoloc.getLatitude());
-            lng = new Double(geoloc.getLongitude());
-          }
-          // îzóÒÇ…äiî[
-          StringBuffer sb = new StringBuffer();
-          sb.append(id + mSepa);
-          //sb.append("text=" + text + ":");
-          String thisDate = cal.get(Calendar.YEAR) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DATE);
-          sb.append(thisDate + mSepa);
-          sb.append(screenname + mSepa + text);
-          //sb.append("created=" + created + ":");
-          //sb.append("lat=" + lat + ":");
-          //sb.append("lng=" + lng + ":");
-          //sb.append("\n");
-          //System.out.println(sb.toString());
-          
-          mArrayList.add(sb.toString());
-          //mTextArea.insert(sb.toString(), 0);
-        }
+			Status s = list.get(i);
+			// ‰∏ÄÊÑè„Å™„ÉÑ„Ç§„Éº„ÉàID
+			long id = s.getId();
+			// „ÉÑ„Ç§„Éº„Éà„ÅÆÂÜÖÂÆπ
+			String text = s.getText();
+			// ÊäïÁ®øÊó•ÊôÇ
+			Date created = s.getCreatedAt();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(created);
+			// ‰ΩçÁΩÆÊÉÖÂ†±
+			GeoLocation geoloc = s.getGeoLocation();
+			Double lat = null;
+			Double lng = null;
+			if(geoloc != null){
+				lat = new Double(geoloc.getLatitude());
+				lng = new Double(geoloc.getLongitude());
+			}
+			// ÈÖçÂàó„Å´Ê†ºÁ¥ç
+			StringBuffer sb = new StringBuffer();
+			sb.append(id + mSepa);
+			//sb.append("text=" + text + ":");
+			String thisDate = cal.get(Calendar.YEAR) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DATE);
+			sb.append(thisDate + mSepa);
+			sb.append(screenname + mSepa + text);
+			//sb.append("created=" + created + ":");
+			//sb.append("lat=" + lat + ":");
+			//sb.append("lng=" + lng + ":");
+			//sb.append("\n");
+			//System.out.println(sb.toString());
+			
+			mArrayList.add(sb.toString());
+			//mTextArea.insert(sb.toString(), 0);
+		}
 	}
 
 }
